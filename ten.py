@@ -1,4 +1,5 @@
 import json
+import random
 
 file = open("tendata.json")
 tenRecords = json.load(file)
@@ -20,6 +21,10 @@ for tenRecord in tenRecords["data"]:
 
 topTenStatSorted = sorted(tenStat.items(), key=lambda x:x[1], reverse=True)
 topTenStatSortedOccur = list(map(lambda x: x[0], topTenStatSorted))
+top21TenStatOccur = topTenStatSortedOccur[:25]
 
-WinningTicket = " ".join(topTenStatSortedOccur[:20])
-print("Winning Ticket: {}".format(WinningTicket))
+realTicket = " ".join(sorted(random.sample(top21TenStatOccur, 10)))
+bestTicket = " ".join(sorted(topTenStatSortedOccur[:10]))
+
+print("Winning Ticket: {}".format(bestTicket))
+print("High Pick Ticket: {}".format(realTicket))
