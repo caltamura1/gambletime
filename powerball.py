@@ -1,6 +1,6 @@
 import json
 
-file = open("data.json")
+file = open("pbdata.json")
 pbRecords = json.load(file)
 file.close()
 
