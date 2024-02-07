@@ -18,6 +18,7 @@ def on_submit():
     currentSelect = combobox.get()
     records = load_file(currentSelect)
     pick_best_ticket(currentSelect, records, output_label)
+    christian_ticket(currentSelect, records, output_chris_label)
 
 ### Choose Data File ###
 def load_file(selection):
@@ -71,7 +72,164 @@ def load_file(selection):
         print("Selection not found.")
     return records
 
-### Ticket Picking Functions ###
+### Christian's Ticket Picking Functions ###
+def christian_ticket(selected_option, records, output_chris_label):
+    if selected_option == "PICK 10":
+        for tenRecord in records["data"]:
+            tenNumbers = tenRecord[9]
+            tenArray = tenNumbers.split(" ")
+            for tenResults in tenArray:
+                if tenResults in tenStat:
+                    occurences = tenStat[tenResults]
+                    occurences += 1
+                    tenStat[tenResults] = occurences
+                else:
+                    tenStat[tenResults] = 1
+
+        topTenStatSorted = sorted(tenStat.items(), key=lambda x:x[1], reverse=True)
+        topTenStatSortedOccur = list(map(lambda x: x[0], topTenStatSorted))
+        topTenStatOccur = topTenStatSortedOccur[0:24]
+        midTenStatOccur = topTenStatSortedOccur[24:50]
+        botTenStatOccur = topTenStatSortedOccur[50:81]
+        realTicket = " ".join(sorted(random.sample(topTenStatOccur, 6) + random.sample(midTenStatOccur, 3) + random.sample(botTenStatOccur, 1)))
+        response = "Christian's Pick\n {}".format(realTicket)
+
+    elif selected_option == "NY LOTTO":
+        for nyRecord in records["data"]:
+            nyNumbers = nyRecord[9]
+            nyArray = nyNumbers.split(" ")
+            for nyResults in nyArray:
+                if nyResults in nyStat:
+                    occurences = nyStat[nyResults]
+                    occurences += 1
+                    nyStat[nyResults] = occurences
+                else:
+                    nyStat[nyResults] = 1
+        topNYStatSorted = sorted(nyStat.items(), key=lambda x:x[1], reverse=True)
+        topNYStatSortedOccur = list(map(lambda x: x[0], topNYStatSorted))
+        topNYStatOccur = topNYStatSortedOccur[:21]
+        midNYStatOccur = topNYStatSortedOccur[21:42]
+        botNYStatOccur = topNYStatSortedOccur[42:60]
+        realTicket = " ".join(sorted(random.sample(topNYStatOccur, 3) + random.sample(midNYStatOccur, 2) + random.sample(botNYStatOccur, 1)))
+        response = "Christian's Pick\n {}".format(realTicket)
+
+    elif selected_option == "CASH 4 LIFE":
+        for c4lRecord in records["data"]:
+            c4lNumbers = c4lRecord[9]
+            c4lArray = c4lNumbers.split(" ")
+            c4lBall = c4lRecord[10]
+
+            for c4lResults in c4lArray:
+                if c4lResults in c4lStat:
+                    c4lStat[c4lResults] += 1
+                else:
+                    c4lStat[c4lResults] = 1
+
+            if c4lBall in c4lStatBall:
+                c4lStatBall[c4lBall] += 1
+            else:
+                c4lStatBall[c4lBall] = 1
+            
+        topC4LStatSorted = sorted(c4lStat.items(), key=lambda x:x[1], reverse=True)
+        C4LBallStatSorted = sorted(c4lStatBall.items(), key=lambda x:x[1], reverse=True)
+
+        topC4LStatSortedOccur = list(map(lambda x: x[0], topC4LStatSorted))
+        C4LBallStatSortedOccur = list(map(lambda x: x[0], C4LBallStatSorted))
+
+        topC4LStatOccur = topC4LStatSortedOccur[:21]
+        midC4LStatOccur = topC4LStatSortedOccur[21:42]
+        botC4LStatOccur = topC4LStatSortedOccur[42:61]
+        topC4LBALLStatOccur = C4LBallStatSortedOccur[:1]
+
+        primary = " ".join(sorted(random.sample(topC4LStatOccur, 3) + random.sample(midC4LStatOccur, 1) + random.sample(botC4LStatOccur, 1)))
+        secondary = "".join(sorted(random.sample(topC4LBALLStatOccur, 1)))
+
+        primaryFMT = "Christian's Pick\n{}".format(primary)
+        secondaryFMT = "\n\nPowerball\n{}".format(secondary)
+
+        realTicket = primaryFMT + secondaryFMT
+        response = realTicket
+
+    elif selected_option == "POWERBALL":
+        for pbRecord in records["data"]:
+            pbNumbers = pbRecord[9]
+            pbArray = pbNumbers.split(" ")
+            pbBall = pbArray.pop()
+
+            for pbResults in pbArray:
+                if pbResults in pbStat:
+                    pbStat[pbResults] += 1
+                else:
+                    pbStat[pbResults] = 1
+
+            if pbBall in pbStatBall:
+                pbStatBall[pbBall] += 1
+            else:
+                pbStatBall[pbBall] = 1
+    
+        topPBStatSorted = sorted(pbStat.items(), key=lambda x:x[1], reverse=True)
+        pbBallStatSorted = sorted(pbStatBall.items(), key=lambda x:x[1], reverse=True)
+
+        topPBStatSortedOccur = list(map(lambda x: x[0], topPBStatSorted))
+        pbBallStatSortedOccur = list(map(lambda x: x[0], pbBallStatSorted))
+
+        topPBStatOccur = topPBStatSortedOccur[:28]
+        midPBStatOccur = topPBStatSortedOccur[28:49]
+        botPBStatOccur = topPBStatSortedOccur[49:70]
+        topPBBALLStatOccur = pbBallStatSortedOccur[:6]
+
+        primary = " ".join(sorted(random.sample(topPBStatOccur, 3) + random.sample(midPBStatOccur, 1) + random.sample(botPBStatOccur, 1)))
+        secondary = "".join(sorted(random.sample(topPBBALLStatOccur, 1)))
+
+        primaryFMT = "Christian's Pick\n{}".format(primary)
+        secondaryFMT = "\n\nPowerball\n{}".format(secondary)
+
+        realTicket = primaryFMT + secondaryFMT
+        response = realTicket
+
+    elif selected_option == "MEGAMILLIONS":
+        for mmRecord in records["data"]:
+            mmNumbers = mmRecord[9]
+            mmArray = mmNumbers.split(" ")
+            mmBall = mmRecord[10]
+
+            for mmResults in mmArray:
+                if mmResults in mmStat:
+                    mmStat[mmResults] += 1
+                else:
+                    mmStat[mmResults] = 1
+
+            if mmBall in mmStatBall:
+                mmStatBall[mmBall] += 1
+            else:
+                mmStatBall[mmBall] = 1
+            
+        topMMStatSorted = sorted(mmStat.items(), key=lambda x:x[1], reverse=True)
+        mmBallStatSorted = sorted(mmStatBall.items(), key=lambda x:x[1], reverse=True)
+
+        topMMStatSortedOccur = list(map(lambda x: x[0], topMMStatSorted))
+        mmBallStatSortedOccur = list(map(lambda x: x[0], mmBallStatSorted))
+
+        topMMStatOccur = topMMStatSortedOccur[:28]
+        midMMStatOccur = topMMStatSortedOccur[28:56]
+        botMMStatOccur = topMMStatSortedOccur[56:71]
+        topMMBALLStatOccur = mmBallStatSortedOccur[:6]
+        
+        primary = " ".join(sorted(random.sample(topMMStatOccur, 3) + random.sample(midMMStatOccur, 1) + random.sample(botMMStatOccur, 1)))
+        secondary = "".join(sorted(random.sample(topMMBALLStatOccur, 1)))
+
+        primaryFMT = "Christian's Pick\n{}".format(primary)
+        secondaryFMT = "\n\nPowerball\n{}".format(secondary)
+
+        realTicket = primaryFMT + secondaryFMT
+        response = realTicket
+
+    else:
+        print("Not a valid submission.")
+
+    output_chris_label.configure(text=response)
+
+### Best Ticket Picking Functions ###
 def pick_best_ticket(selected_option, records, output_label):
     if selected_option == "PICK 10":
         for tenRecord in records["data"]:
@@ -131,7 +289,7 @@ def pick_best_ticket(selected_option, records, output_label):
         C4LBallStatSortedOccur = list(map(lambda x: x[0], C4LBallStatSorted))
 
         top21C4LStatOccur = topC4LStatSortedOccur[:25]
-        top3C4LBALLStatOccur = C4LBallStatSortedOccur[:5]
+        top3C4LBALLStatOccur = C4LBallStatSortedOccur[:1]
 
         primary = " ".join(sorted(random.sample(top21C4LStatOccur, 5)))
         secondary = "".join(sorted(random.sample(top3C4LBALLStatOccur, 1)))
@@ -223,7 +381,7 @@ customtkinter.set_default_color_theme("dark-blue")
 
 ### Variables to store GUI dimensions ###
 root = customtkinter.CTk()
-root.geometry("500x350")
+root.geometry("400x500")
 frame = customtkinter.CTkFrame(master=root)
 frame.pack(pady=20, padx=60, fill="both", expand=True)
 
@@ -238,7 +396,6 @@ combobox.pack(padx=20, pady=10)
 combobox.set(comboOptions[-1])
 
 ### Select button for Combobox ###
-# select = combobox.get()
 submit = customtkinter.CTkButton(master=frame, text="Select", command=(on_submit))
 submit.pack(padx=20, pady=10)
 
@@ -246,9 +403,13 @@ submit.pack(padx=20, pady=10)
 gameSelect = customtkinter.StringVar(root)
 gameSelect.set(comboOptions[-1])
 
-### Output Ticket ###
+### Output Best Ticket ###
 output_label = customtkinter.CTkLabel(master=frame, text="", font=("Arial", 18))
 output_label.pack(pady=10)
+
+### Output Christian Ticket ###
+output_chris_label = customtkinter.CTkLabel(master=frame, text="", font=("Arial", 18))
+output_chris_label.pack(pady=10)
 
 ### Game run loop ###
 root.mainloop()
